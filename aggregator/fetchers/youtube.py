@@ -36,6 +36,13 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 @dataclass
+class Transcript:
+    """Clean plain-text transcript for a single YouTube video."""
+
+    text: str
+
+
+@dataclass
 class VideoEntry:
     """Structured representation of a single YouTube video."""
 
@@ -44,7 +51,7 @@ class VideoEntry:
     url: str
     published_at: datetime
     description: Optional[str] = None
-    transcript: Optional[str] = None
+    transcript: Optional[Transcript] = None
 
 
 # ---------------------------------------------------------------------------
@@ -201,7 +208,7 @@ def fetch_videos(
 # Transcript retrieval
 # ---------------------------------------------------------------------------
 
-def get_transcript(video_id: str) -> Optional[str]:
+def get_transcript(video_id: str) -> Optional[Transcript]:
     """
     Retrieve the transcript for a YouTube video as a clean English plain-text string.
 
@@ -212,7 +219,7 @@ def get_transcript(video_id: str) -> Optional[str]:
         video_id: The 11-character YouTube video ID.
 
     Returns:
-        Full transcript as a single clean English plain-text string, or ``None``.
+        A :class:`Transcript` wrapping the full English plain-text, or ``None``.
     """
     ytt_api = YouTubeTranscriptApi()
 
@@ -240,7 +247,7 @@ def get_transcript(video_id: str) -> Optional[str]:
         if text:
             parts.append(text)
 
-    return " ".join(parts) or None
+    return Transcript(text=" ".join(parts)) if parts else None
 
 # ---------------------------------------------------------------------------
 # High-level public API
@@ -299,7 +306,12 @@ if __name__ == "__main__":
     idchannel = resolve_channel_id('hibabenzahra496');
     print(idchannel);
 
-    print(get_transcript('G2Ec3h5CfA8'))'''
+    print(get_transcript('G2Ec3h5CfA8'))
     videos = fetch_channel_videos('Fireship', since=datetime.now(tz=timezone.utc) - timedelta(days=17))
     for video in videos: 
-        print(video)
+        print(video)'''
+    transcript = get_transcript('G2Ec3h5CfA8') 
+    if transcript:
+        print(transcript.text)
+    else:
+        print("No English transcript")
