@@ -1,3 +1,4 @@
+```
 my-ai-news-aggregator/
 ├── agent/
 │   └── digest_prompt.md
@@ -22,3 +23,4 @@ my-ai-news-aggregator/
 ├── pyproject.toml
 ├── .env.example
 └── README.md
+```
